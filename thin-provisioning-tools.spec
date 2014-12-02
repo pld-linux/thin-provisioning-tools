@@ -13,6 +13,7 @@ BuildRequires:	boost-devel
 BuildRequires:	expat-devel >= 1.95
 # exact version unknown (some C++11 features needed)
 BuildRequires:	gcc-c++ >= 6:4.6
+BuildRequires:	libaio-devel
 BuildRequires:	libstdc++-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -47,12 +48,6 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc README.md TODO.org
-%attr(755,root,root) %{_sbindir}/thin_check
-%attr(755,root,root) %{_sbindir}/thin_dump
-%attr(755,root,root) %{_sbindir}/thin_metadata_size
-%attr(755,root,root) %{_sbindir}/thin_repair
-%attr(755,root,root) %{_sbindir}/thin_restore
-%attr(755,root,root) %{_sbindir}/thin_rmap
 %attr(755,root,root) %{_sbindir}/cache_check
 %attr(755,root,root) %{_sbindir}/cache_dump
 %attr(755,root,root) %{_sbindir}/cache_metadata_size
@@ -63,12 +58,12 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_sbindir}/era_invalidate
 %attr(755,root,root) %{_sbindir}/era_restore
 %attr(755,root,root) %{_sbindir}/pdata_tools
-%{_mandir}/man8/thin_check.8*
-%{_mandir}/man8/thin_dump.8*
-%{_mandir}/man8/thin_metadata_size.8*
-%{_mandir}/man8/thin_repair.8*
-%{_mandir}/man8/thin_restore.8*
-%{_mandir}/man8/thin_rmap.8*
+%attr(755,root,root) %{_sbindir}/thin_check
+%attr(755,root,root) %{_sbindir}/thin_dump
+%attr(755,root,root) %{_sbindir}/thin_metadata_size
+%attr(755,root,root) %{_sbindir}/thin_repair
+%attr(755,root,root) %{_sbindir}/thin_restore
+%attr(755,root,root) %{_sbindir}/thin_rmap
 %{_mandir}/man8/cache_check.8.gz
 %{_mandir}/man8/cache_dump.8.gz
 %{_mandir}/man8/cache_repair.8.gz
@@ -76,3 +71,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man8/era_check.8.gz
 %{_mandir}/man8/era_dump.8.gz
 %{_mandir}/man8/era_invalidate.8.gz
+%{_mandir}/man8/thin_check.8*
+%{_mandir}/man8/thin_dump.8*
+%{_mandir}/man8/thin_metadata_size.8*
+%{_mandir}/man8/thin_repair.8*
+%{_mandir}/man8/thin_restore.8*
+%{_mandir}/man8/thin_rmap.8*
