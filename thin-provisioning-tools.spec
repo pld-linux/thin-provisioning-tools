@@ -1,12 +1,12 @@
 Summary:	Tools for manipulating dm-thin device-mapper target medatada
 Summary(pl.UTF-8):	Narzędzia do modyfikowania metadanych celów dm-thin device-mappera
 Name:		thin-provisioning-tools
-Version:	0.4.1
+Version:	0.5.6
 Release:	1
 License:	GPL v3+
 Group:		Applications/System
-Source0:	https://github.com/jthornber/thin-provisioning-tools/archive/v%{version}.tar.gz?/%{name}-%{version}.tar.gz
-# Source0-md5:	00bfee4c83c732fd7f5273ec2b6754a2
+Source0:	https://github.com/jthornber/thin-provisioning-tools/archive/v%{version}/%{name}-%{version}.tar.gz
+# Source0-md5:	292a9a15e0f494dd752947342eb7f5cd
 URL:		https://github.com/jthornber/thin-provisioning-tools
 BuildRequires:	autoconf >= 2.61
 BuildRequires:	boost-devel
@@ -33,7 +33,8 @@ device-mappera.
 %configure
 %{__make} \
 	CFLAGS="%{rpmcflags} -Wall" \
-	CXXFLAGS="%{rpmcxxflags} -fno-strict-aliasing -Wall"
+	CXXFLAGS="%{rpmcxxflags} -fno-strict-aliasing -Wall -DSTRERROR_R_CHAR_P" \
+	V=
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -59,21 +60,25 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_sbindir}/era_restore
 %attr(755,root,root) %{_sbindir}/pdata_tools
 %attr(755,root,root) %{_sbindir}/thin_check
+%attr(755,root,root) %{_sbindir}/thin_delta
 %attr(755,root,root) %{_sbindir}/thin_dump
 %attr(755,root,root) %{_sbindir}/thin_metadata_size
 %attr(755,root,root) %{_sbindir}/thin_repair
 %attr(755,root,root) %{_sbindir}/thin_restore
 %attr(755,root,root) %{_sbindir}/thin_rmap
-%{_mandir}/man8/cache_check.8.gz
-%{_mandir}/man8/cache_dump.8.gz
-%{_mandir}/man8/cache_repair.8.gz
-%{_mandir}/man8/cache_restore.8.gz
-%{_mandir}/man8/era_check.8.gz
-%{_mandir}/man8/era_dump.8.gz
-%{_mandir}/man8/era_invalidate.8.gz
+%attr(755,root,root) %{_sbindir}/thin_trim
+%{_mandir}/man8/cache_check.8*
+%{_mandir}/man8/cache_dump.8*
+%{_mandir}/man8/cache_repair.8*
+%{_mandir}/man8/cache_restore.8*
+%{_mandir}/man8/era_check.8*
+%{_mandir}/man8/era_dump.8*
+%{_mandir}/man8/era_invalidate.8*
 %{_mandir}/man8/thin_check.8*
+%{_mandir}/man8/thin_delta.8*
 %{_mandir}/man8/thin_dump.8*
 %{_mandir}/man8/thin_metadata_size.8*
 %{_mandir}/man8/thin_repair.8*
 %{_mandir}/man8/thin_restore.8*
 %{_mandir}/man8/thin_rmap.8*
+%{_mandir}/man8/thin_trim.8*
