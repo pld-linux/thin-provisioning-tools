@@ -1,4 +1,4 @@
-Summary:	Tools for manipulating dm-thin device-mapper target medatada
+Summary:	Tools for manipulating dm-thin device-mapper target metadata
 Summary(pl.UTF-8):	Narzędzia do modyfikowania metadanych celów dm-thin device-mappera
 Name:		thin-provisioning-tools
 Version:	0.5.6
