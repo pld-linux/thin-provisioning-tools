@@ -1,12 +1,12 @@
 Summary:	Tools for manipulating dm-thin device-mapper target metadata
 Summary(pl.UTF-8):	Narzędzia do modyfikowania metadanych celów dm-thin device-mappera
 Name:		thin-provisioning-tools
-Version:	0.5.6
+Version:	0.6.0
 Release:	1
 License:	GPL v3+
 Group:		Applications/System
 Source0:	https://github.com/jthornber/thin-provisioning-tools/archive/v%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	292a9a15e0f494dd752947342eb7f5cd
+# Source0-md5:	8959e1f718523aebc2382a2b6ff8ddea
 URL:		https://github.com/jthornber/thin-provisioning-tools
 BuildRequires:	autoconf >= 2.61
 BuildRequires:	boost-devel
@@ -62,6 +62,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_sbindir}/thin_check
 %attr(755,root,root) %{_sbindir}/thin_delta
 %attr(755,root,root) %{_sbindir}/thin_dump
+%attr(755,root,root) %{_sbindir}/thin_ls
 %attr(755,root,root) %{_sbindir}/thin_metadata_size
 %attr(755,root,root) %{_sbindir}/thin_repair
 %attr(755,root,root) %{_sbindir}/thin_restore
@@ -77,6 +78,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man8/thin_check.8*
 %{_mandir}/man8/thin_delta.8*
 %{_mandir}/man8/thin_dump.8*
+%{_mandir}/man8/thin_ls.8*
 %{_mandir}/man8/thin_metadata_size.8*
 %{_mandir}/man8/thin_repair.8*
 %{_mandir}/man8/thin_restore.8*
