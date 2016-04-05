@@ -1,12 +1,15 @@
 Summary:	Tools for manipulating dm-thin device-mapper target metadata
 Summary(pl.UTF-8):	Narzędzia do modyfikowania metadanych celów dm-thin device-mappera
 Name:		thin-provisioning-tools
-Version:	0.6.0
+Version:	0.6.1
 Release:	1
 License:	GPL v3+
 Group:		Applications/System
+#Source0Download: https://github.com/jthornber/thin-provisioning-tools/releases
 Source0:	https://github.com/jthornber/thin-provisioning-tools/archive/v%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	8959e1f718523aebc2382a2b6ff8ddea
+# Source0-md5:	f6f1207d63f5bd7aa1943ce3f12da84e
+Patch0:		%{name}-sh.patch
+Patch1:		%{name}-opt.patch
 URL:		https://github.com/jthornber/thin-provisioning-tools
 BuildRequires:	autoconf >= 2.61
 BuildRequires:	boost-devel
@@ -27,13 +30,17 @@ device-mappera.
 
 %prep
 %setup -q
+%patch0 -p1
+%patch1 -p1
 
 %build
 %{__autoconf}
-%configure
+%configure \
+	--with-optimisation=" "
+
+CFLAGS="%{rpmcflags}" \
+CXXFLAGS="%{rpmcxxflags}" \
 %{__make} \
-	CFLAGS="%{rpmcflags} -Wall" \
-	CXXFLAGS="%{rpmcxxflags} -fno-strict-aliasing -Wall -DSTRERROR_R_CHAR_P" \
 	V=
 
 %install

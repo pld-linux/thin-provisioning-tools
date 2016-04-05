@@ -1,0 +1,11 @@
+--- thin-provisioning-tools-0.6.1/Makefile.in.orig	2016-02-10 15:28:49.000000000 +0100
++++ thin-provisioning-tools-0.6.1/Makefile.in	2016-04-05 21:41:46.362026050 +0200
+@@ -103,7 +103,7 @@
+ OBJECTS:=$(subst .cc,.o,$(SOURCE))
+ TOP_DIR:=@top_srcdir@
+ TOP_BUILDDIR:=@top_builddir@
+-CFLAGS+=-g -Wall -O3
++CFLAGS+=-Wall
+ CFLAGS+=@LFS_FLAGS@
+ CXXFLAGS+=-g -Wall -fno-strict-aliasing
+ CXXFLAGS+=@CXXOPTIMISE_FLAG@
