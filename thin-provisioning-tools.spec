@@ -18,6 +18,7 @@ BuildRequires:	expat-devel >= 1.95
 BuildRequires:	gcc-c++ >= 6:4.6
 BuildRequires:	libaio-devel
 BuildRequires:	libstdc++-devel
+Obsoletes:	device-mapper-persistent-data
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
