@@ -1,23 +1,21 @@
 Summary:	Tools for manipulating dm-thin device-mapper target metadata
 Summary(pl.UTF-8):	Narzędzia do modyfikowania metadanych celów dm-thin device-mappera
 Name:		thin-provisioning-tools
-Version:	0.6.1
+Version:	0.6.3
 Release:	1
 License:	GPL v3+
 Group:		Applications/System
 #Source0Download: https://github.com/jthornber/thin-provisioning-tools/releases
 Source0:	https://github.com/jthornber/thin-provisioning-tools/archive/v%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	f6f1207d63f5bd7aa1943ce3f12da84e
+# Source0-md5:	28b352363ea7eb6698ad2efcd7d8c2ae
 Patch0:		%{name}-sh.patch
-Patch1:		%{name}-opt.patch
 URL:		https://github.com/jthornber/thin-provisioning-tools
 BuildRequires:	autoconf >= 2.61
 BuildRequires:	boost-devel
 BuildRequires:	expat-devel >= 1.95
-# exact version unknown (some C++11 features needed)
-BuildRequires:	gcc-c++ >= 6:4.6
+BuildRequires:	gcc-c++ >= 6:4.0
 BuildRequires:	libaio-devel
-BuildRequires:	libstdc++-devel
+BuildRequires:	libstdc++-devel >= 6:4.0
 Obsoletes:	device-mapper-persistent-data
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -32,15 +30,12 @@ device-mappera.
 %prep
 %setup -q
 %patch0 -p1
-%patch1 -p1
 
 %build
 %{__autoconf}
 %configure \
 	--with-optimisation=" "
 
-CFLAGS="%{rpmcflags}" \
-CXXFLAGS="%{rpmcxxflags}" \
 %{__make} \
 	V=
 
@@ -48,15 +43,14 @@ CXXFLAGS="%{rpmcxxflags}" \
 rm -rf $RPM_BUILD_ROOT
 
 %{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT \
-	MANDIR=%{_mandir}
+	DESTDIR=$RPM_BUILD_ROOT
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc README.md TODO.org
+%doc CHANGES README.md TODO.org
 %attr(755,root,root) %{_sbindir}/cache_check
 %attr(755,root,root) %{_sbindir}/cache_dump
 %attr(755,root,root) %{_sbindir}/cache_metadata_size
