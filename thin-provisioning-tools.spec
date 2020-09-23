@@ -1,13 +1,18 @@
+# TODO: finish rust tools (vendor crates; crc32c crate seems x86_64 only?)
+#
+# Conditional build:
+%bcond_with	rust	# rust based tools (thin_metadata_{pack,unpack})
+
 Summary:	Tools for manipulating dm-thin device-mapper target metadata
 Summary(pl.UTF-8):	Narzędzia do modyfikowania metadanych celów dm-thin device-mappera
 Name:		thin-provisioning-tools
-Version:	0.8.5
+Version:	0.9.0
 Release:	1
 License:	GPL v3+
 Group:		Applications/System
 #Source0Download: https://github.com/jthornber/thin-provisioning-tools/releases
 Source0:	https://github.com/jthornber/thin-provisioning-tools/archive/v%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	4ff949e9eef65aaee68d6d923ba0862f
+# Source0-md5:	b3ce6f476a5b7ea64c583e7d910d2db7
 Patch0:		%{name}-sh.patch
 URL:		https://github.com/jthornber/thin-provisioning-tools
 BuildRequires:	autoconf >= 2.61
@@ -16,6 +21,10 @@ BuildRequires:	expat-devel >= 1.95
 BuildRequires:	gcc-c++ >= 6:4.0
 BuildRequires:	libaio-devel
 BuildRequires:	libstdc++-devel >= 6:4.0
+%if %{with rust}
+BuildRequires:	cargo
+BuildRequires:	rust
+%endif
 Obsoletes:	device-mapper-persistent-data
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -39,11 +48,20 @@ device-mappera.
 %{__make} \
 	V=
 
+%if %{with rust}
+%{__make} rust-tools
+%endif
+
 %install
 rm -rf $RPM_BUILD_ROOT
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
+
+%if %{with rust}
+%{__make} install-rust-tools \
+	DESTDIR=$RPM_BUILD_ROOT
+%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -90,3 +108,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man8/thin_restore.8*
 %{_mandir}/man8/thin_rmap.8*
 %{_mandir}/man8/thin_trim.8*
+%if %{with rust}
+%attr(755,root,root) %{_sbindir}/thin_metadata_pack
+%attr(755,root,root) %{_sbindir}/thin_metadata_unpack
+%{_mandir}/man8/thin_metadata_pack.8*
+%{_mandir}/man8/thin_metadata_unpack.8*
+%endif
