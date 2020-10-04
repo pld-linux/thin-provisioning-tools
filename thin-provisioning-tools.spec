@@ -16,6 +16,8 @@ Source0:	https://github.com/jthornber/thin-provisioning-tools/archive/v%{version
 Patch0:		%{name}-sh.patch
 URL:		https://github.com/jthornber/thin-provisioning-tools
 BuildRequires:	autoconf >= 2.61
+# for fresh config.sub
+BuildRequires:	automake
 BuildRequires:	boost-devel
 BuildRequires:	expat-devel >= 1.95
 BuildRequires:	gcc-c++ >= 6:4.0
@@ -41,6 +43,7 @@ device-mappera.
 %patch0 -p1
 
 %build
+cp -f /usr/share/automake/config.sub autoconf
 %{__autoconf}
 %configure \
 	--with-optimisation=" "
