@@ -49,6 +49,9 @@ cp -f /usr/share/automake/config.sub autoconf
 	--with-optimisation=" "
 
 %{__make} \
+	CFLAGS="%{rpmcflags} %{rpmcppflags}" \
+	CXXFLAGS="%{rpmcxxflags} %{rpmcppflags} -DSTRERROR_R_CHAR_P -std=c++11" \
+	LDFLAGS="%{rpmldflags}" \
 	V=
 
 %if %{with rust}
