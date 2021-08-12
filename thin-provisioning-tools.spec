@@ -62,7 +62,8 @@ cp -f /usr/share/automake/config.sub autoconf
 rm -rf $RPM_BUILD_ROOT
 
 %{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT
+	DESTDIR=$RPM_BUILD_ROOT \
+	STRIP=:
 
 %if %{with rust}
 %{__make} install-rust-tools \
