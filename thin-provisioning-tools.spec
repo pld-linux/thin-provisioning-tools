@@ -7,7 +7,7 @@ Summary:	Tools for manipulating dm-thin device-mapper target metadata
 Summary(pl.UTF-8):	Narzędzia do modyfikowania metadanych celów dm-thin device-mappera
 Name:		thin-provisioning-tools
 Version:	0.9.0
-Release:	1
+Release:	2
 License:	GPL v3+
 Group:		Applications/System
 #Source0Download: https://github.com/jthornber/thin-provisioning-tools/releases
