@@ -1,33 +1,24 @@
-# TODO: finish rust tools (vendor crates; crc32c crate seems x86_64 only?)
-#
-# Conditional build:
-%bcond_with	rust	# rust based tools (thin_metadata_{pack,unpack})
-
 Summary:	Tools for manipulating dm-thin device-mapper target metadata
 Summary(pl.UTF-8):	Narzędzia do modyfikowania metadanych celów dm-thin device-mappera
 Name:		thin-provisioning-tools
-Version:	0.9.0
-Release:	2
+Version:	1.0.6
+Release:	1
 License:	GPL v3+
 Group:		Applications/System
 #Source0Download: https://github.com/jthornber/thin-provisioning-tools/releases
 Source0:	https://github.com/jthornber/thin-provisioning-tools/archive/v%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	b3ce6f476a5b7ea64c583e7d910d2db7
-Patch0:		%{name}-sh.patch
+# Source0-md5:	c93f56d938c8c11cf8ed3e34973c5125
+# cargo vendor && cd .. && tar cJf thin-provisioning-tools-1.0.6-vendor.tar.xz thin-provisioning-tools-1.0.6/vendor thin-provisioning-tools-1.0.6/Cargo.lock
+Source1:	%{name}-%{version}-vendor.tar.xz
+# Source1-md5:	88c6b926e0bc601db5b61ddf0f9f2846
 URL:		https://github.com/jthornber/thin-provisioning-tools
-BuildRequires:	autoconf >= 2.61
-# for fresh config.sub
-BuildRequires:	automake
-BuildRequires:	boost-devel
-BuildRequires:	expat-devel >= 1.95
-BuildRequires:	gcc-c++ >= 6:4.0
-BuildRequires:	libaio-devel
-BuildRequires:	libstdc++-devel >= 6:4.0
-%if %{with rust}
 BuildRequires:	cargo
+BuildRequires:	expat-devel >= 1.95
+BuildRequires:	libstdc++-devel >= 6:4.0
+BuildRequires:	rpmbuild(macros) >= 2.004
 BuildRequires:	rust
-%endif
 Obsoletes:	device-mapper-persistent-data
+ExclusiveArch:	%{rust_arches}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -39,43 +30,44 @@ Zestaw narzędzi do modyfikowania metadanych celów dm-thin
 device-mappera.
 
 %prep
-%setup -q
-%patch0 -p1
+%setup -q -b1
+
+export CARGO_HOME="$(pwd)/.cargo"
+
+mkdir -p "$CARGO_HOME"
+cat >.cargo/config <<EOF
+[source.crates-io]
+replace-with = "vendored-sources"
+
+[source."git+https://github.com/jthornber/rio?branch=master"]
+git = "https://github.com/jthornber/rio"
+branch = "master"
+replace-with = "vendored-sources"
+
+[source.vendored-sources]
+directory = "vendor"
+EOF
 
 %build
-cp -f /usr/share/automake/config.sub autoconf
-%{__autoconf}
-%configure \
-	--with-optimisation=" "
+export CARGO_HOME="$(pwd)/.cargo"
 
-%{__make} \
-	CFLAGS="%{rpmcflags} %{rpmcppflags}" \
-	CXXFLAGS="%{rpmcxxflags} %{rpmcppflags} -DSTRERROR_R_CHAR_P -std=c++11" \
-	LDFLAGS="%{rpmldflags}" \
-	V=
-
-%if %{with rust}
-%{__make} rust-tools
-%endif
+%cargo_build --frozen
 
 %install
 rm -rf $RPM_BUILD_ROOT
+export CARGO_HOME="$(pwd)/.cargo"
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
+	PDATA_TOOLS=%{cargo_targetdir}/%{rust_target}/release/pdata_tools \
 	STRIP=:
-
-%if %{with rust}
-%{__make} install-rust-tools \
-	DESTDIR=$RPM_BUILD_ROOT
-%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc CHANGES README.md TODO.org
+%doc CHANGES README.md doc/TODO.md
 %attr(755,root,root) %{_sbindir}/cache_check
 %attr(755,root,root) %{_sbindir}/cache_dump
 %attr(755,root,root) %{_sbindir}/cache_metadata_size
@@ -91,7 +83,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_sbindir}/thin_delta
 %attr(755,root,root) %{_sbindir}/thin_dump
 %attr(755,root,root) %{_sbindir}/thin_ls
+%attr(755,root,root) %{_sbindir}/thin_metadata_pack
 %attr(755,root,root) %{_sbindir}/thin_metadata_size
+%attr(755,root,root) %{_sbindir}/thin_metadata_unpack
 %attr(755,root,root) %{_sbindir}/thin_repair
 %attr(755,root,root) %{_sbindir}/thin_restore
 %attr(755,root,root) %{_sbindir}/thin_rmap
@@ -110,14 +104,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man8/thin_delta.8*
 %{_mandir}/man8/thin_dump.8*
 %{_mandir}/man8/thin_ls.8*
+%{_mandir}/man8/thin_metadata_pack.8*
 %{_mandir}/man8/thin_metadata_size.8*
+%{_mandir}/man8/thin_metadata_unpack.8*
 %{_mandir}/man8/thin_repair.8*
 %{_mandir}/man8/thin_restore.8*
 %{_mandir}/man8/thin_rmap.8*
 %{_mandir}/man8/thin_trim.8*
-%if %{with rust}
-%attr(755,root,root) %{_sbindir}/thin_metadata_pack
-%attr(755,root,root) %{_sbindir}/thin_metadata_unpack
-%{_mandir}/man8/thin_metadata_pack.8*
-%{_mandir}/man8/thin_metadata_unpack.8*
-%endif
