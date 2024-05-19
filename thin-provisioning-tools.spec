@@ -1,16 +1,16 @@
 Summary:	Tools for manipulating dm-thin device-mapper target metadata
 Summary(pl.UTF-8):	Narzędzia do modyfikowania metadanych celów dm-thin device-mappera
 Name:		thin-provisioning-tools
-Version:	1.0.6
+Version:	1.0.12
 Release:	1
 License:	GPL v3+
 Group:		Applications/System
 #Source0Download: https://github.com/jthornber/thin-provisioning-tools/releases
 Source0:	https://github.com/jthornber/thin-provisioning-tools/archive/v%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	c93f56d938c8c11cf8ed3e34973c5125
-# cargo vendor && cd .. && tar cJf thin-provisioning-tools-1.0.6-vendor.tar.xz thin-provisioning-tools-1.0.6/vendor thin-provisioning-tools-1.0.6/Cargo.lock
+# Source0-md5:	05d99251481dbd135c3c39a02fafd3cb
+# cargo vendor && cd .. && tar cJf thin-provisioning-tools-1.0.12-vendor.tar.xz thin-provisioning-tools-1.0.12/vendor thin-provisioning-tools-1.0.12/Cargo.lock
 Source1:	%{name}-%{version}-vendor.tar.xz
-# Source1-md5:	88c6b926e0bc601db5b61ddf0f9f2846
+# Source1-md5:	91dc98d98d0036d87bf6123e2781fe6b
 URL:		https://github.com/jthornber/thin-provisioning-tools
 BuildRequires:	cargo
 BuildRequires:	expat-devel >= 1.95
